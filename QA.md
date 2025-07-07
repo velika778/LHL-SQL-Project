@@ -1,15 +1,14 @@
-What are your risk areas? Identify and describe them.
+### What are your risk areas? Identify and describe them.
 
-* Because I did not create any joins to answer the assigned questions, I felt my risks were minimal. I created a simple query to validate the total revenues by visited (see query 1 below).
+* Because I did not create any joins to answer the assigned questions, I felt my risks were minimal. I created a simple query to validate the total revenues by visitid (see query 1 below).
 
 * I was also cautious about my rankings for question #4, which is why I developed the ranks as a subquery so that I could manually validate it. This is described under question 4; see query 2 below for a sample of the subquery referenced.
 
 * For the questions I came up with myself, I knew that I was introducing a lot of risk by executing sequential queries and joining on the results. I also knew that the `analytics` table contains duplicates that I couldn't simply remove by excluding nulls as before, since I was interested in looking at both visits that did result in orders and visits that didn't. To confirm that I didn't duplicate revenues, I ran query 3 to count cases where revenue by fullvisitorid in the view I had created did not equal revenue by fullvisitorid in `all_sessions`. 
 
-QA Process:
-Describe your QA process and include the SQL queries used to execute it.
+### Describe your QA process and include the SQL queries used to execute it.
 
-Query 1:
+* Query 1 checks total revenue by country from the view I created against total revenue by country from the original `all_sessions` table:
 
 ```
 SELECT 
@@ -39,7 +38,7 @@ ON B.visitid = A.visitid
 ORDER BY percent_error DESC
 ```
 
-Query 2:
+* Query 2 generates a ranking list that allowed me to validate that my final query produced the correct top product result.
 
 ```
 -- subquery generates the product rankings by country
@@ -54,7 +53,7 @@ WITH rankings AS (
 )
 ```
 
-Query 3:
+* Query 3 produces a table that shows the revenues by fullvisitorid from the `visitors_with_orders` view that I created and compares them to the revenues by fullvisitorid from `all_sessions`. It then checks whether the sum of all revenue is correct and produces either a 1 or a 0, then sums those results to count the number of instances of incorrect values.
 
 ```
 WITH revcheck AS (
@@ -65,7 +64,8 @@ FROM visitors_with_orders vo
 JOIN all_sessions A
 ON vo.fullvisitorid = A.fullvisitorid
 JOIN analytics B
-ON vo.fullvisitorid = B.fullvisitorid)
+ON vo.fullvisitorid = B.fullvisitorid
+)
 
 SELECT sum(CASE 
 	WHEN vo_revenue <> orig_revenue THEN 1
