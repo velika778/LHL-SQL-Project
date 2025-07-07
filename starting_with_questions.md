@@ -261,7 +261,7 @@ WITH session_analytics AS (
     WHERE COALESCE(totaltransactionrevenue,revenue) IS NOT NULL
 )
 
-SELECT distinct(city) as city, productcategory, sum(quantity) OVER (PARTITION BY visitor) as num_products_ordered FROM session_analytics
+SELECT distinct(city) as city, productcategory, sum(quantity) OVER (PARTITION BY city, visitor) as num_products_ordered FROM session_analytics
 WHERE productcategory NOT IN
     ('${escCatTitle}','(not set)')
     AND city <> 'not available in demo dataset'
