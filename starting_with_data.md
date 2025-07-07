@@ -147,3 +147,68 @@ Answer:
 
 ![Avg time spent by country](images/avgtimebycountry.png "Avg time spent by country")
 
+Question 4: Did visitors order any items that are not currently in stock?
+
+```
+WITH inventory_status AS (
+	SELECT st.sku,
+		CASE
+			WHEN st.sku NOT IN (SELECT sku FROM products) then 'not stocked'
+			WHEN st.sku IN (SELECT p.sku
+				FROM products p
+				RIGHT JOIN session_totals st
+				ON p.sku = st.sku
+				where stocklevel = 0) then 'no stock'
+			ELSE 'in stock'
+				END
+			as stocking_status
+	FROM session_totals st
+	)
+
+SELECT distinct visitid, count(inv.sku) OVER (PARTITION BY visitid) as num_items_ordered, st.productname, coalesce(stocklevel,0) as stock_level, stocking_status
+FROM inventory_status inv
+	FULL OUTER JOIN products p
+	ON inv.sku = p.sku
+	RIGHT JOIN session_totals st
+	ON inv.sku = st.sku
+WHERE stocking_status <> 'in stock'
+GROUP BY visitid, inv.sku,st. productname, stocking_status, coalesce(stocklevel,0)
+ORDER BY count(inv.sku) OVER (PARTITION BY visitid) DESC
+```
+
+Answer:
+
+![List of unstocked items by order](images/ordersnostock.png "List of unstocked items by order")
+
+Question 5: What are the top ordered items that are out of stock?
+
+```
+WITH inventory_status AS (
+	SELECT st.sku,
+		CASE
+			WHEN st.sku NOT IN (SELECT sku FROM products) then 'not stocked'
+			WHEN st.sku IN (SELECT p.sku
+				FROM products p
+				RIGHT JOIN session_totals st
+				ON p.sku = st.sku
+				where stocklevel = 0) then 'no stock'
+			ELSE 'in stock'
+				END
+			as stocking_status
+	FROM session_totals st
+	)
+
+SELECT distinct st.productname, count(inv.sku) as num_items_ordered, coalesce(stocklevel,0) as stock_level
+FROM inventory_status inv
+	FULL OUTER JOIN products p
+	ON inv.sku = p.sku
+	RIGHT JOIN session_totals st
+	ON inv.sku = st.sku
+WHERE stocking_status <> 'in stock'
+GROUP BY visitid, inv.sku,st. productname, stocking_status, coalesce(stocklevel,0)
+ORDER BY count(inv.sku) DESC
+```
+
+Answer:
+
+![List of out of stock items by number required](images/topoutofstock.png "List of out of stock items by number required")
