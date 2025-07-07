@@ -49,7 +49,7 @@ LIMIT 5
 
 By country:
 
-![Revenue by country](images/revenuesbycountry.png)
+![Revenue by country](images/totalrevbycountry.png)
 
 By city:
 
