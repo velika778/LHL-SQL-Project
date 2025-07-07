@@ -111,6 +111,7 @@ FROM visitors_with_orders
 ```
 
 Answer:
+
 ![Mean, median and mode number of days between first visit and first purchase](images/avgdays.png "Mean, median and mode number of days between first visit and first purchase")
 
 Question 3: Are visitors from certain countries likely to spend more money than others?
@@ -127,6 +128,7 @@ GROUP BY country, total_revenue
 ```
 
 Answer:
+
 ![Avg revenue by country](images/avgrevbycountry.png "Avg revenue by country")
 
 Question 4: Are visitors from certain countries likely to spend more time on the site than others?
@@ -142,5 +144,6 @@ GROUP BY country, total_timeonsite_inmins
 ```
 
 Answer:
+
 ![Avg time spent by country](images/avgtimebycountry.png "Avg time spent by country")
 
