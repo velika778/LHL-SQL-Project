@@ -6,7 +6,7 @@ I wanted to challenge myself to write code that was simple and easy to follow wi
 
 ### Process
 
-1. I retrieved the relevant data files from the [LHL Shared Drive](https://drive.google.com/drive/folders/1efDA4oc9w bTbAvrESdOJpg9u gEUBhJ) and created 5 tables:
+1. I retrieved the relevant data files from the [LHL Shared Drive](https://drive.google.com/drive/folders/1efDA4oc9w-bTbAvrESdOJpg9u-gEUBhJ) and created 5 tables:
     * all_sessions
     * analytics
     * products
