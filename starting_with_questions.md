@@ -1,6 +1,6 @@
 All answers are based on a view created using the following query as described in the readme:
 
-```
+```sql
 CREATE OR REPLACE VIEW session_totals
 AS 
     (SELECT 
@@ -26,7 +26,7 @@ AS
 
 ##### Top country query:
 
-```
+```sql
 SELECT country, sum(total_revenue) AS total_revenue
 FROM session_totals
 GROUP BY country
@@ -36,7 +36,7 @@ LIMIT 5
 
 ##### Top city query:
 
-```
+```sql
 SELECT city, sum(total_revenue) AS total_revenue
 FROM session_totals
 WHERE city <> 'not available in demo dataset' -- excludes values where the city is unknown
@@ -61,7 +61,7 @@ By city:
 
 #####	Average number of products ordered per country:
 
-```
+```sql
 SELECT DISTINCT country, round(avg(count(distinct sku)) OVER (PARTITION BY country),2) as avg_products -- counts distinct skus per order in place of using the quantity which is missing values
 FROM session_totals
 GROUP BY country, visitid
@@ -70,7 +70,7 @@ ORDER BY avg_products DESC
 
 #####	Average number of products ordered per city:
 
-```
+```sql
 SELECT DISTINCT city, round(avg(count(distinct sku)) OVER (PARTITION BY city),2) as avg_products -- counts distinct skus per order in place of using the quantity which is missing values
 FROM session_totals
 WHERE city <> 'not available in demo dataset' -- excludes values where the city is unknown
@@ -94,7 +94,7 @@ By city:
 
 ##### Product categories ordered by visitors in country:
 
-```
+```sql
 SELECT distinct(country) as country, productcategory, count(distinct sku) as num_products_ordered FROM session_totals -- counts distinct skus per order in place of using the quantity which is missing values
 WHERE productcategory NOT IN
 	('${escCatTitle}','(not set)') -- ignores product categories where the values are missing but not null
@@ -104,7 +104,7 @@ ORDER BY country, num_products_ordered DESC
 
 ##### Product categories ordered by visitors in each city:
 
-```
+```sql
 SELECT distinct(city) as city, productcategory, count(distinct sku) as num_products_ordered FROM session_totals -- counts distinct skus per order in place of using the quantity which is missing values
 WHERE productcategory NOT IN
     ('${escCatTitle}','(not set)') -- ignores product categories where the values are missing but not null
@@ -131,7 +131,7 @@ SQL Queries:
 
 ##### By country:
 
-```
+```sql
 -- subquery generates the product rankings by country
 WITH rankings AS (
 	SELECT
@@ -152,7 +152,7 @@ WHERE rank_by_country = 1
 
 ##### By city:
 
-```
+```sql
 -- subquery generates the product rankings by city
 WITH rankings AS (
 	SELECT
@@ -185,7 +185,7 @@ By city:
 Question 5: Can we summarize the impact of revenue generated from each city/country?
 SQL Queries:
 
-```
+```sql
 -- generates a summary of orders by country over time, allowing for analysis of product sales by country and city (where available) and identify seasonality, if any
 SELECT country,
 	CASE 
@@ -207,7 +207,7 @@ GROUP BY country, city, productcategory, sku, productname, date_of_visit
 
 By city:
 
-```
+```sql
 -- generates a summary of orders by city over time, allowing for analysis of product sales by country and city and identify seasonality, if any
 SELECT 	city,
 	productcategory, 

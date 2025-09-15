@@ -10,7 +10,7 @@
 
 * Query 1 checks total revenue by country from the view I created against total revenue by country from the original `all_sessions` table:
 
-```
+```sql
 SELECT 
 	distinct A.country AS matched_country,
 	A.total_revenue AS orig_total_revenue,
@@ -40,7 +40,7 @@ ORDER BY percent_error DESC
 
 * Query 2 generates a ranking list that allowed me to validate that my final query produced the correct top product result.
 
-```
+```sql
 -- subquery generates the product rankings by country
 WITH rankings AS (
 	SELECT
@@ -55,7 +55,7 @@ WITH rankings AS (
 
 * Query 3 produces a table that shows the revenues by fullvisitorid from the `visitors_with_orders` view that I created and compares them to the revenues by fullvisitorid from `all_sessions`. It then checks whether the sum of all revenue is correct and produces either a 1 or a 0, then sums those results to count the number of instances of incorrect values.
 
-```
+```sql
 WITH revcheck AS (
 SELECT distinct vo.fullvisitorid, 
 	totaltransactionrevenue as vo_revenue,

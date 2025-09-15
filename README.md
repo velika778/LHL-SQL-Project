@@ -26,7 +26,7 @@ I wanted to challenge myself to write code that was simple and easy to follow wi
 * There did not seem to be any connection between `products`, `sales_report` and/or `all_sessions` or `analytics` which meant that I also couldn't tell what impact orders had on inventory levels.
 * Since most fields in `all_sessions` were irrelevant to answering the assigned questions, I created a view called `session_totals` that I used to query a subset of the data more efficiently:
 
-```
+```sql
 CREATE OR REPLACE VIEW session_totals
 AS 
     (SELECT 

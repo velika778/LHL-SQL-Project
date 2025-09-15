@@ -1,6 +1,6 @@
 I was interested in finding out if we can draw any conclusions about the amount of time a visitor spends on the site and how much money they spend. I created the following view to help me query the data:
 
-```
+```sql
 CREATE OR REPLACE VIEW visitors_with_orders
 
 AS 
@@ -84,7 +84,7 @@ Question 1: Do people spend more money the more time they spend on the site?
 
 SQL Queries:
 
-```
+```sql
 -- query calculates the dollar value of 1 minute on the site based on the revenue generated per unique visitor over time
 SELECT
 	DISTINCT fullvisitorid, 
@@ -102,7 +102,7 @@ Answer: I played with ordering by `total_revenue`, `total_timeonsite_inmins` and
 Question 2: How many days is there between the average visitor's first visit and their first purchase?
 SQL Queries:
 
-```
+```sql
 SELECT
 	AVG(days_to_first_purchase) as avg_days,
 	PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY days_to_first_purchase) as median_days,
@@ -118,7 +118,7 @@ Question 3: Are visitors from certain countries likely to spend more money than 
 
 SQL Queries:
 
-```
+```sql
 SELECT
 	distinct country,
 	round(AVG(total_revenue) OVER (PARTITION BY country),2)
@@ -134,7 +134,7 @@ Answer:
 Question 4: Are visitors from certain countries likely to spend more time on the site than others?
 SQL Queries:
 
-```
+```sql
 SELECT
 	distinct country,
 	round(AVG(total_timeonsite_inmins) OVER (PARTITION BY country),0)
@@ -149,7 +149,7 @@ Answer:
 
 Question 4: Did visitors order any items that are not currently in stock?
 
-```
+```sql
 WITH inventory_status AS (
 	SELECT st.sku,
 		CASE
@@ -182,7 +182,7 @@ Answer:
 
 Question 5: What are the top ordered items that are out of stock?
 
-```
+```sql
 WITH inventory_status AS (
 	SELECT st.sku,
 		CASE
